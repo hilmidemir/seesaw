@@ -1,0 +1,71 @@
+:root {
+    --plank-length: 400px;
+    --plank-height: 36px;
+    --plank-visual: 14px;
+    --text: #eeeeee;
+    --panel:#151a22;
+    --accent:#5b9cff;
+}
+
+* {box-sizing: border-box;}
+html, body {height: 100%;}
+body {
+    margin: 0;
+    background: radial-gradient(1000px 600px at 50% 0%, #101521, #0c0f15 60%, #090b10);
+    color: var(--text);
+    font: 14px/1.5 system-ui, apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+}
+
+.app{width: min(720px, 100%); display: grid; gap: 16px;}
+.card{background: var(--panel); border: 1px solid #1d2531; border-radius: 14px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, .35);}
+.title{display: flex; align-items: center; gap: 8px; font-weight: 700;}
+.title .dot {width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0, 0, 0, 3px #284b82 inset;}
+
+.scene {
+    position: relative; height: 280px; 
+    display: flex; align-items: center; justify-content: center;
+}
+
+.pivot{
+  position:absolute;
+  left:50%;
+  bottom:52px;                 /* plank’ın altından hizala */
+  transform: translateX(-50%);
+  width:0; height:0;
+  border-left: 28px solid transparent;
+  border-right: 28px solid transparent;
+  border-bottom: 48px solid #394055;  /* the way of the triangle */
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.45));
+}
+
+.plank {
+    position: absolute; left: 50%; bottom: 90px;
+    transform: translateX(-50%) rotate(0deg);
+    width: var(--plank-length); height: var(--plank-height);
+    transform-origin: 50% 50%; 
+    border-radius: 999px;
+}
+
+.plank .wood {
+    pointer-events: none;
+    position: absolute; left: 0; right: 0;
+    top: calc(50% - var(--plank-visual)/2);
+    height: var(--plank-visual);
+    background: linear-gradient(#caa26b, #b98944 52%, #a06d2e);
+    border-radius: 999px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 -1px 0 rgba(0, 0, 0, .25);
+}
+
+.plank .mid {
+    pointer-events: none;
+    position: absolute; left: calc(50% - 1px);
+    top: calc(50% - var(--plank-visual)/2 - 6px);
+    width: 2px; height: calc(var(--plank-visual) +12px);
+    background: #1b1f2b; opacity: 0.6;
+}
+
+.foot {
+    color: #94a3b8; font-size: 12px; opacity: .85; text-align: center;
+}
