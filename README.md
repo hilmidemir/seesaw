@@ -17,7 +17,7 @@
 5. **Nesne oluşturma** (her tıklamadan sonra rastgele ağırlık belirleme (1-10 kg) ve o ağırlığın ekranda gözükmesi)
 6. **HUD** (sağ sol ağırlıklar sıradaki ağırlık ve tork bilgiis)
 7. **Kalıcılık** (Data storage sayfa yenilenmesi)
-8. **İnce ayar** (klik toleransı, küçük görsel iyileştirmeler)
+8. **Responsive Tasarım** (Mobil cihazlar ve tablet için düzenlemeler)
 9. **Bonus**
 > -En son belirli bir ağırlığı geçerse tahterevalli kırılsın.
 > -Zamana bağlı diğer eklentiler.
