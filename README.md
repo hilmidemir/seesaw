@@ -18,6 +18,7 @@
 6. **HUD** (sağ sol ağırlıklar sıradaki ağırlık ve tork bilgiis)
 7. **Kalıcılık** (Data storage sayfa yenilenmesi)
 8. **Responsive Tasarım** (Mobil cihazlar ve tablet için düzenlemeler)
+9. **Moduler yapı** (Dosya düzenlemeleri ve tanımlama düzenleme)
 9. **Bonus**
 > -En son belirli bir ağırlığı geçerse tahterevalli kırılsın.
 > -Zamana bağlı diğer eklentiler.

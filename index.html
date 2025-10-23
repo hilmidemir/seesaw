@@ -9,6 +9,19 @@
 </head>
 <body>
     <div class="app">
+        <div class="card hud" id="hud">
+            <div class="pill L">
+                <span class="dot"></span>
+                Left mass: <span class="val" id="massL">&nbsp;0 KG</span>
+            </div>
+            <div class="pill">
+                Angle: <span class="val" id="angleVal">&nbsp;0°</span>
+            </div>
+            <div class="pill R">
+                <span class="dot"></span>
+                Right mass: <span class="val" id="massR">&nbsp;0 KG</span>
+            </div>
+        </div>
         <div class="card scene">
             <div class="pivot" aria-hidden="true"></div>
             <div class="plank" id="plank" aria-label="seesaw plank">
@@ -18,7 +31,8 @@
                 <div class="objects" id="objects" aria-live="polite"></div>
             </div>
         </div>
-        <div class="card foot" id="readout"></div>
+        <button id="resetBtn" class="btn">Reset</button>
+        <div  id="readout"></div>
 
     </div>
         <script type="module" src="js/main.js"></script>

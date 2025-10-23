@@ -16,3 +16,10 @@ export function renderObjects(objectsEl, state) {
     objectsEl.appendChild(el)
   }
 }
+
+export function renderHUD(hudEls, metrics, currentAngle) {
+  const { massL, massR, torqueL, totqueR, angleVal } = hudEls
+  massL.textContent = metrics.sumL + 'KG'
+  massR.textContent = metrics.sumR + 'KG'
+  if (angleVal) angleVal.textContent = Math.round(currentAngle * 10) / 10 + '°'
+}
