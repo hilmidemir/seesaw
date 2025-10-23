@@ -11,11 +11,13 @@ const massLEl = document.getElementById('massL')
 const massREl = document.getElementById('massR')
 const angleValEl = document.getElementById('angleVal')
 const resetBtn = document.getElementById('resetBtn')
+const nextWeightEl = document.getElementById('nextWeight')
 
 const hudEls = {
   massL: massLEl,
   massR: massREl,
   angleVal: angleValEl,
+  nextW: nextWeightEl,
 }
 
 const PLANK_LENGTH = parseFloat(
@@ -58,6 +60,54 @@ resetBtn?.addEventListener('click', () => {
   loop()
   saveState(state) // save cleared state
 })
+let nextWeight = null
+function ensureNextWeight() {
+  if (nextWeight == null) nextWeight = randInt(1, 10)
+  return nextWeight
+}
+
+/************ TODO Ghost object for previewing placement ****************
+const ghostEl = document.createElement('div')
+ghostEl.className = 'ghost'
+objectsEl.appendChild(ghostEl)
+
+
+function showGhostAt(clientX) {
+  const w = ensureNextWeight()
+  const x = getCenteredXFromClick(clientX, plankEl)
+  const half = state.plankLength / 2
+  const size = Math.round(16 + (44 - 16) * ((w - 1) / 9))
+  ghostEl.style.setProperty('--obj-size', size + 'px')
+  ghostEl.style.left = x + half - size / 2 + 'px'
+  ghostEl.classList.add('show')
+}
+
+function hideGhost() {
+  ghostEl.classList.remove('show')
+}
+
+function handleGhostMove(e) {
+  const rect = plankEl.getBoundingClientRect()
+
+  const insideY = e.clientY >= rect.top - 8 && e.clientY <= rect.bottom + 8
+  if (!insideY) {
+    hideGhost()
+    return
+  }
+  showGhostAt(e.clientX)
+}
+
+plankEl.addEventListener('pointerenter', (e) => {
+  ensureNextWeight()
+  showGhostAt(e.clientX)
+})
+
+plankEl.addEventListener('pointermove', (e) => {
+  showGhostAt(e.clientX)
+})
+
+plankEl.addEventListener('pointerleave', hideGhost)
+***************FAILED AND DELAYED **************/
 
 // process of click events
 plankEl.addEventListener('click', (e) => {
@@ -65,19 +115,23 @@ plankEl.addEventListener('click', (e) => {
   if (e.clientY < rect.top || e.clientY > rect.bottom) return //top and bottom boundrys
 
   const x = getCenteredXFromClick(e, plankEl) //position of click
-  const weight = randInt(1, 10)
+  const weight = ensureNextWeight()
+  nextWeight = null // for next weight
 
   state.objects.push({ x, weight })
 
   const metrics = computePhysiscsAndTarget(state)
   state.metrics = metrics
 
-  renderHUD(hudEls, metrics, state.angle) // update HUD
-
-  const side = x < 0 ? 'LEFT' : x > 0 ? 'RIGHT' : 'CENTER'
-
+  renderHUD(hudEls, metrics, state.angle, ensureNextWeight()) // update HUD
   renderObjects(objectsEl, state) // update visual objects
 
+  const last = objectsEl.lastElementChild
+  if (last) {
+    last.classList.add('fall')
+  }
+
+  const side = x < 0 ? 'LEFT' : x > 0 ? 'RIGHT' : 'CENTER'
   const logLine =
     `Added: ${weight} kg ${round(x, 0)} px (${side}): ` +
     `Torque L/R: ${metrics.leftTorque}/${metrics.rightTorque}, Angle: ${round(
@@ -97,14 +151,58 @@ plankEl.addEventListener('click', (e) => {
     `Torque L/R: ${metrics.leftTorque} / ${metrics.rightTorque} | ` +
     `Target Angle: ${round(metrics.targetAngle, 1)} degrees |` +
     `Current Angle: ${round(state.angle, 1)} degrees`
-  // update readout*/
+  // update readout
+  */
 })
 // initialize from storage
+
+/*******************Drag n drpp******************/
+let dragging = null
+objectsEl.addEventListener('pointerdown', (e) => {
+  const target = e.target.closest('.obj')
+  if (!target) return
+  e.preventDefault()
+
+  const idx = Number(target.dataset.idx)
+  if (Number.isNaN(idx)) return
+
+  dragging = { idx }
+  target.setPointerCapture?.(e.pointerId)
+})
+
+objectsEl.addEventListener('pointermove', (e) => {
+  if (!dragging) return
+  const idx = dragging.idx
+  const x = getCenteredXFromClick(e, plankEl)
+  state.objects[idx].x = x
+
+  const el = objectsEl.querySelector(`.obj[data-idx="${idx}"]`)
+  if (el) {
+    const size = parseFloat(getComputedStyle(el).getPropertyValue('--obj-size'))
+    const half = state.plankLength / 2
+    el.style.left = x + half - size / 2 + 'px' // for drag position update
+    el.dataset.side = x < 0 ? 'L' : x > 0 ? 'R' : 'C'
+  }
+
+  state.metrics = computePhysiscsAndTarget(state)
+  renderHUD(hudEls, state.metrics, state.angle, ensureNextWeight())
+})
+
+function endDrag(e) {
+  if (!dragging) return
+  dragging = null
+  renderObjects(objectsEl, state)
+  state.metrics = computePhysiscsAndTarget(state)
+  renderHUD(hudEls, state.metrics, state.angle, ensureNextWeight())
+  saveState(state)
+}
+objectsEl.addEventListener('pointerup', endDrag)
+objectsEl.addEventListener('pointercancel', endDrag)
 ;(function initFromStorage() {
   const data = loadState()
   if (!data) {
     applyAngle()
-    renderHUD(hudEls, state.metrics, state.angle)
+    renderHUD(hudEls, state.metrics, state.angle, ensureNextWeight())
     return
   }
 
@@ -120,7 +218,7 @@ plankEl.addEventListener('click', (e) => {
   }
 
   applyAngle()
-  renderHUD(hudEls, state.metrics, state.angle)
+  renderHUD(hudEls, state.metrics, state.angle, ensureNextWeight())
 
   updateReadoutVisibility()
 })()
@@ -133,7 +231,7 @@ function loop() {
     state.angle = state.targetAngle
   if (prev !== state.angle) {
     applyAngle()
-    renderHUD(hudEls, state.metrics, state.angle)
+    renderHUD(hudEls, state.metrics, state.angle, ensureNextWeight()) // update HUD
   }
   rafId = requestAnimationFrame(loop)
 }

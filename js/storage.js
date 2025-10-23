@@ -4,7 +4,6 @@ export function saveState(state) {
   const objs = Array.isArray(state?.objects) ? state.objects : []
 
   const data = {
-    version: 1,
     plankLength: Number(state?.plankLength) || 400,
     angle: typeof state?.angle === 'number' ? state.angle : 0,
     targetAngle: typeof state?.targetAngle === 'number' ? state.targetAngle : 0,

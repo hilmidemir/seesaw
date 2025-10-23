@@ -8,6 +8,8 @@
   --accent:#5b9cff;
   --muted: black;
   --text-background: #8b8a8a;
+
+  --obj-size: 24px; /*default object size */
 }
 
 * {box-sizing: border-box;}
@@ -16,7 +18,7 @@ body {
   margin: 0;
   background: radial-gradient(1000px 600px at 50% 0%, #101521, #0c0f15 60%, #090b10);
   color: var(--text);
-  font: 14px/1.5 system-ui, apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+  font: 14px/1.5 system-ui, "Helvetica Neue", Arial;
   display: flex; align-items: center; justify-content: center;
   padding: 24px;
 }
@@ -100,19 +102,26 @@ body {
   left: 0; top: 0;
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 
 .obj{
   position: absolute;
-  top: -13px;
-  width: 24px;
-  height: 24px;
+  top: calc(-1 * (var(--obj-size)/2 - var(--plank-visual)/2));
+  width: var(--obj-size);
+  height: var(--obj-size);
   border-radius: 50%;
   display: grid; place-items: center;
   color: #0d121a; font-weight: 700; font-size: 12px; user-select: none;
   box-shadow: 0 4px 10px #00000000;
   border: 1px solid #00000022;
-  transition: transform 0.15s ease, box-shadow 0.3s ease;
+  transition: transform 0.15s ease, box-shadow 0.3s ease, left .06s linear;
+  cursor: grab;
+}
+
+.obj:active{
+  cursor: grabbing;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .25);
 }
 
 .obj:hover{
@@ -120,8 +129,34 @@ body {
 }
 
 .obj small {font-size: 10px; opacity: .8;}
-.obj[data-side="L"]{ background: linear-gradient(lightblue); }
-.obj[data-side="R"]{ background: linear-gradient( green); }
+.obj[data-side="L"]{ background: linear-gradient(rgb(52, 74, 116)); }
+.obj[data-side="R"]{ background: linear-gradient( rgb(115, 54, 143)); }
+
+.obj.fall {
+  animation: dropIn 380m cubic-bezier(.2, .8, .2,1);
+}
+@keyframes dropIn {
+  0%{transform: translateY(-120%) scale(0.85); opacity: .0;}
+  60%{transform: translateY(6px) scale(1.02); opacity: 1;}
+  100%{transform: translateY(0) scale(1); opacity: 1;}
+}
+
+.ghost {
+  position: absolute;
+    top: calc(-1 * (var(--obj-size)/2 - var(--plank-visual)/2));
+    width: var(--obj-size);
+    height: var(--obj-size);
+    border-radius: 50%;
+    border: 2px dashed #9fb7ff;
+    background: transparent;
+    opacity: .52;
+    pointer-events: none;
+    display: none;
+}
+
+.ghost.show {
+  display: block;
+}
 
 .hud {
   display: flex; flex-wrap: wrap; gap: 8px 12px;
