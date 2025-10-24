@@ -133,7 +133,7 @@ body {
 .obj[data-side="R"]{ background: linear-gradient( rgb(115, 54, 143)); }
 
 .obj.fall {
-  animation: dropIn 380m cubic-bezier(.2, .8, .2,1);
+  animation: dropIn 380ms cubic-bezier(.2, .8, .2,1);
 }
 @keyframes dropIn {
   0%{transform: translateY(-120%) scale(0.85); opacity: .0;}
