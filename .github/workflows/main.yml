@@ -1,35 +1,52 @@
-name: Deploy static site to Pages
+name: Build & Test (static site)
 
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  build:
+  validate-and-archive:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      # Eğer düz statik site ise (root’taki dosyalar)
-      - uses: actions/upload-pages-artifact@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: List files (debug)
+        run: ls -la
+
+      - name: Validate presence of index.html
+        run: |
+          test -f index.html || (echo "index.html not found" && exit 1)
+          test -s index.html || (echo "index.html is empty" && exit 1)
+
+      - name: Quick sanity check
+        run: |
+          if ! grep -E "<script|<link|<style" -q index.html; then
+            echo "No assets referenced in index.html (ok if intentional)"; 
+          fi
+
+      - name: Upload static site artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: .   # (veya 'dist' gibi build çıktın)
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          name: static-site
+          path: |
+            **/*.html
+            **/*.css
+            **/*.js
+            **/*.svg
+            **/*.png
+            **/*.jpg
+            **/*.jpeg
+            **/*.gif
+            **/*.webp
+            **/*.ico
+            **/*.json
+            assets/**
+            style/**
+            styles/**
+            css/**
+            js/**
+          if-no-files-found: warn
