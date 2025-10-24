@@ -117,6 +117,7 @@ body {
   border: 1px solid #00000022;
   transition: transform 0.15s ease, box-shadow 0.3s ease, left .06s linear;
   cursor: grab;
+  touch-action: none;
 }
 
 .obj:active{
@@ -181,4 +182,90 @@ body {
 }
 .btn:active {
   background: #111827; transform: translateY(2px);
+}
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .hud .pill {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+  .hud {
+    gap: 6px 10px;
+  }
+  .obj {
+    font-size: 11px;
+  }
+  .plank {
+    bottom: 75px;
+  }
+  .pivot {
+    bottom: 42px;
+    border-left: 24px solid transparent;
+    border-right: 24px solid transparent;
+    border-bottom: 42px solid #394055;
+  }
+  .scene {
+    height: 240px;
+  }
+  body {
+    padding: 16px;
+    font-size: 13px;
+  }
+  :root {
+    --plank-length: 320px;
+    --plank-height: 32px;
+    --plank-visual: 12px;
+  }
+  
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: 7px 12px;
+    font-size: 12px;
+    max-width: 150px;
+  }
+  .hud .pill {
+    padding: 3px 8px;
+    font-size: 11px;
+    border-radius: 7px;
+  }
+  
+  .hud .pill .dot {
+    width: 6px;
+    height: 6px;
+  }
+  .hud {
+    gap: 6px 8px;
+    justify-content: center;
+  }
+  .obj {
+    font-size: 10px;
+  }
+  .plank {
+    bottom: 65px;
+  }
+  .pivot {
+    bottom: 35px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 36px solid #394055;
+  }
+  .scene {
+    height: 200px;
+  }
+  body {
+    padding: 12px;
+    font-size: 12px;
+  }
+  :root {
+    --plank-length: 280px;
+    --plank-height: 28px;
+    --plank-visual: 10px;
+    --readout-h: 100px;
+  }
 }
