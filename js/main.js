@@ -2,6 +2,7 @@ import { clamp, round, randInt } from './utils.js'
 import { computePhysiscsAndTarget } from './physics.js'
 import { renderHUD, renderObjects } from './render.js'
 import { saveState, loadState, clearState } from './storage.js'
+import { playSound } from './sounds.js'
 
 const plankEl = document.getElementById('plank') // the clickable plank element
 const readout = document.getElementById('readout') // the text element
@@ -12,11 +13,6 @@ const massREl = document.getElementById('massR')
 const angleValEl = document.getElementById('angleVal')
 const resetBtn = document.getElementById('resetBtn')
 const nextWeightEl = document.getElementById('nextWeight')
-
-const soundDrag = new Audio('assets/drag.mp3')
-const soundDrop = new Audio('assets/drop.mp3')
-const soundendDrag = new Audio('assets/end.mp3')
-const soundReset = new Audio('assets/reset.mp3')
 
 const hudEls = {
   massL: massLEl,
@@ -49,56 +45,13 @@ resetBtn?.addEventListener('click', () => {
   updateReadoutVisibility()
   loop()
   saveState(state) // save cleared state
-  playSound(soundReset)
+  playSound('reset')
 })
 let nextWeight = null
 function ensureNextWeight() {
   if (nextWeight == null) nextWeight = randInt(1, 10)
   return nextWeight
 }
-
-/************ TODO Ghost object for previewing placement ****************
- const ghostEl = document.createElement('div')
- ghostEl.className = 'ghost'
- objectsEl.appendChild(ghostEl)
- 
- 
- function showGhostAt(clientX) {
-  const w = ensureNextWeight()
-  const x = getCenteredXFromClick(clientX, plankEl)
-  const half = state.plankLength / 2
-  const size = Math.round(16 + (44 - 16) * ((w - 1) / 9))
-  ghostEl.style.setProperty('--obj-size', size + 'px')
-  ghostEl.style.left = x + half - size / 2 + 'px'
-  ghostEl.classList.add('show')
-  }
-  
-  function hideGhost() {
-    ghostEl.classList.remove('show')
-}
-
-function handleGhostMove(e) {
-  const rect = plankEl.getBoundingClientRect()
-  
-  const insideY = e.clientY >= rect.top - 8 && e.clientY <= rect.bottom + 8
-  if (!insideY) {
-    hideGhost()
-    return
-    }
-    showGhostAt(e.clientX)
-    }
-    
-    plankEl.addEventListener('pointerenter', (e) => {
-      ensureNextWeight()
-      showGhostAt(e.clientX)
-      })
-      
-      plankEl.addEventListener('pointermove', (e) => {
-        showGhostAt(e.clientX)
-        })
-        
-        plankEl.addEventListener('pointerleave', hideGhost)
-        ***************FAILED AND DELAYED **************/
 
 // process of click events
 plankEl.addEventListener('click', (e) => {
@@ -110,7 +63,7 @@ plankEl.addEventListener('click', (e) => {
   nextWeight = null // for next weight
 
   state.objects.push({ x, weight })
-  playSound(soundDrop)
+  playSound('drop')
 
   const metrics = computePhysiscsAndTarget(state)
   state.metrics = metrics
@@ -136,15 +89,6 @@ plankEl.addEventListener('click', (e) => {
   updateReadoutVisibility()
 
   saveState(state) // save to localStorage
-
-  /*readout.textContent =
-          `Added: ${weight} kg ${round(x, 0)} px (${side} | ` +
-          `Mass L/R: ${metrics.sumL} kg / ${metrics.sumR} kg | ` +
-          `Torque L/R: ${metrics.leftTorque} / ${metrics.rightTorque} | ` +
-          `Target Angle: ${round(metrics.targetAngle, 1)} degrees |` +
-          `Current Angle: ${round(state.angle, 1)} degrees`
-          // update readout
-  */
 })
 // initialize from storage
 
@@ -159,7 +103,7 @@ objectsEl.addEventListener('pointerdown', (e) => {
   if (Number.isNaN(idx)) return
 
   dragging = { idx }
-  playSound(soundDrag)
+  playSound('drag')
 
   target.setPointerCapture?.(e.pointerId)
 })
@@ -232,13 +176,6 @@ objectsEl.addEventListener('pointercancel', endDrag)
 
   updateReadoutVisibility()
 })()
-
-function playSound(sound) {
-  // play sound effect
-  const s = sound.cloneNode()
-  s.volume = 0.2
-  s.play().catch(() => {})
-}
 
 let rafId = null
 function loop() {
