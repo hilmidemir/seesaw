@@ -1,120 +1,128 @@
-Project Roadmap — Seesaw Physics Simulation
-1. HTML + CSS Skeleton
+# ⚖️ Seesaw Physics Simulation
 
-Set up the basic structure and layout of the project — including the plank, pivot, and HUD (heads-up display) elements.
-
-2. Initial Click Interaction
-
-Implement the first interaction: when the user clicks on the plank, display the X-coordinate (position) where the click occurred.
-
-3. Physics Calculation
-
-Add the core physics logic:
-
-Compute torque and target angle.
-
-Apply physical constraints (maximum tilt: ±30°).
-
-4. Animation
-
-Introduce smooth animation:
-
-When a new weight is added, the plank transitions smoothly to its new equilibrium angle.
-
-5. Object Creation
-
-Generate weight objects dynamically:
-
-Each click spawns a new object with a random weight between 1–10 kg.
-
-Display the object visually on the plank.
-
-6. HUD (Heads-Up Display)
-
-Show real-time information including:
-
-Left and right side weights.
-
-Next random weight.
-
-Torque and balance information.
-
-7. Data Persistence
-
-Enable data storage so that:
-
-The simulation state is saved and restored even after refreshing the page.
-
-8. Responsive Design
-
-Optimize for all devices:
-
-Ensure the interface scales and adapts properly for mobile and tablet screens.
-
-9. Modular Architecture
-
-Refactor into a clean, modular structure:
-
-Separate logic into independent JS modules (e.g., physics.js, render.js, storage.js, etc.).
-
-Improve readability, maintainability, and scalability.
-
-Seesaw Physics Simulation
-
-An interactive seesaw physics playground built with pure HTML, CSS, and JavaScript.
-
-Click to drop weights, drag to move them, and watch the plank tilt in real time.
+An **interactive seesaw physics playground** built with **HTML, CSS, and JavaScript** — no frameworks, no libraries.  
+Click to drop weights, drag to move them, and watch the plank tilt in real time!
 
 
+🌐 **Live Demo:** [https://hilmidemir.github.io/seesaw/](#)
 
-Features
+## 🧠 Project Roadmap
 
-- Realistic torque-based balance physics
+### 1. HTML + CSS Skeleton
+- Built the base layout containing the **plank**, **pivot**, and **HUD** elements.  
+- Established clean structure and responsive positioning.
 
-- Click to add random weights (1–10 kg)
+### 2. Initial Click Interaction
+- Implemented click detection on the plank.  
+- Displayed X-coordinate position for testing click placement.
 
-- Drag & drop repositioning
+### 3. Physics Calculation
+- Added real-world balance logic:
+  - **Torque = weight × distance from center**
+  - Applied maximum tilt constraint of **±30°**.
 
-- Smooth plank tilt animation
+### 4. Animation
+- Introduced smooth, frame-based animation for realistic tilting.  
+- The plank transitions gradually to its new equilibrium angle.
 
-- LocalStorage state saving
+### 5. Object Creation
+- Each click spawns a new weight object (random **1–10 kg**).  
+- Weight appears visually on the plank at the clicked position.
 
-- Sound effects for drop, drag, and reset
+### 6. HUD (Heads-Up Display)
+- Displays **real-time information** including:
+  - Left and right side total weights  
+  - Next random weight  
+  - Current plank angle  
 
-- Simple modular file structure (render, physics, storage, utils)
+### 7. Data Persistence
+- Implemented **localStorage** to save and restore simulation state.  
+- The setup remains intact even after refreshing the page.
 
-🧩 File Structure
+### 8. Responsive Design
+- Optimized layout for all devices — desktop, tablet, and mobile.  
+- Maintains clarity and usability across screen sizes.
+
+### 9. Modular Architecture
+- Refactored project into multiple self-contained modules for clarity:
+  - `physics.js` → physics & torque calculations  
+  - `render.js` → DOM rendering logic  
+  - `storage.js` → localStorage operations  
+  - `utils.js` → helper functions  
+  - `main.js` → main controller / event handling  
+
+---
+
+## 🚀 Features
+
+✔️ Realistic torque-based balance physics  
+✔️ Click to add random weights (1–10 kg)  
+✔️ Drag & drop repositioning  
+✔️ Smooth tilt animation  
+✔️ LocalStorage state saving  
+✔️ Sound effects for drop, drag, and reset  
+✔️ Modular and maintainable file structure  
+
+---
+
+## 🧩 File Structure
 
 📁 seesaw/
 │
 ├── index.html
-
-└── style/
-    ├── styles.css
-
-└── js/
-    ├── main.js
-    ├── physics.js
-    ├── render.js
-    ├── storage.js
-    ├── utils.js
+│
+├── style/
+│ └── styles.css
+│
+├── js/
+│ ├── main.js
+│ ├── physics.js
+│ ├── render.js
+│ ├── storage.js
+│ ├── utils.js
+│
 └── assets/
-    ├── drag.mp3
-    ├── drop.mp3
-    └── reset.mp3
+├── drag.mp3
+├── drop.mp3
+└── reset.mp3
 
-🕹️ Usage
+---
 
-Click on the plank to drop a random-weight ball.
+## 🕹️ How to Use
 
-Drag a ball to move it along the plank.
+1. **Click** anywhere on the plank to drop a random-weight ball.  
+2. **Drag** a ball to reposition it along the plank.  
+3. **Watch** the seesaw tilt in real-time based on balance physics.  
+4. **Reset** to clear all weights and restore the plank to level position.  
+5. All data (positions, weights, and angle) are automatically **saved** in localStorage.
 
-Reset clears all weights and resets the angle.
+---
 
-All data (positions & angle) are saved in localStorage so the state persists after refresh.
+## 📐 Physics Explained
 
-📐 Physics
+> **Torque = Weight × Distance from Center**
 
-Torque = weight × distance from center
+- The difference between left and right torques determines the **plank’s angle**.  
+- The tilt is limited to **±30°** to maintain smooth and realistic motion.  
 
-The plank angle is mapped from torque difference, limited to ±30 ° for a smooth realistic effect.
+---
+
+## 🧰 Technologies Used
+- **HTML5** — structure & layout  
+- **CSS3** — responsive design & animations  
+- **Vanilla JavaScript (ES Modules)** — logic & interactivity  
+
+---
+
+## 🎧 Demo Sounds
+- 🎵 *drag.mp3* — when dragging a weight  
+- 💥 *drop.mp3* — when dropping a new weight  
+- 🔄 *reset.mp3* — when resetting the scene  
+
+---
+
+## 🧑‍💻 Author
+Developed by **Hilmi DEMİR**  
+📬 Feel free to connect or provide feedback!
+
+---
